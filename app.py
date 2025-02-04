@@ -85,11 +85,11 @@ def classify_number():
         if not num_str:
             return jsonify({"error": True, "message": "Missing 'number' parameter."}), 400
 
-        # Validate input
+        # Validate input if its an integer
         try:
             num = int(num_str)
         except ValueError:
-            return jsonify({"number": num_str, "error": True}), 400
+            return jsonify({"number": num_str, "error": True, "message": "Invalid number format."}), 400
 
         # Gather number properties
         # figure how to keep json response ordered
