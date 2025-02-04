@@ -98,5 +98,10 @@ def classify_number():
             "error_type": True
         }), 500
 
+
+@app.route('/test')
+def test():
+    return "Hello from test!"
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
