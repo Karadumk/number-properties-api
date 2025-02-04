@@ -22,11 +22,22 @@ A simple Flask API that takes a number and returns interesting mathematical prop
 -   Retrives number mathematical properties
 -   Supports all valid integers
 
+`GET https://number-properties-api.onrender.com/api/classify-number?number={num}`
+
+-   Deployed endpoint
+-   Accessible from any location
+-   Same functionality as local endpoint
+
 ## Example Usage
 
-#### Using cURL
+#### Using cURL(local)
 ```bash
 curl "http://127.0.0.1:5000/api/classify-number?number=678"
+```
+
+#### Using cURL(deployed)
+```bash
+curl "https://number-properties-api.onrender.com/api/classify-number?number=678"
 ```
 
 ## Response Example
