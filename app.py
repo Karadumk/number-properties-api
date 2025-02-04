@@ -48,7 +48,6 @@ def get_number_properties(num):
     # Check for Armstrong number
     if is_armstrong_number(num):
         properties.append("armstrong")
-
     return properties
     # Should look like
     # For 371: ['odd', 'armstrong']
@@ -88,6 +87,8 @@ def classify_number():
         # Validate input if its an integer
         try:
             num = int(num_str)
+            if num < 0:  # Handle negative numbers
+                return jsonify({"number": num_str, "error": "Number must be non-negative"}), 400
         except ValueError:
             return jsonify({"number": num_str, "error": True}), 400
 
