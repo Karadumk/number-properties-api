@@ -78,18 +78,18 @@ def classify_number():
     """Classify a number and return its properties."""
     try:
         # Figure how to get number from query parameter
-        num_str = request.args.get("number")
+        num_str = request.args.get('number')
         logging.info(f"Received number: {num_str}")  # Add logging
 
         # Check if 'number' parameter is missing
-        if not num_str:
-            return jsonify({"error": True, "message": "Missing 'number' parameter."}), 400
+        if num_str is None:
+            return jsonify({"number": "", "error": True}), 400
 
         # Validate input if its an integer
         try:
             num = int(num_str)
         except ValueError:
-            return jsonify({"number": num_str, "error": True, "message": "Invalid number format."}), 400
+            return jsonify({"number": num_str, "error": True}), 400
 
         # Gather number properties
         # figure how to keep json response ordered
@@ -109,7 +109,7 @@ def classify_number():
 
     except Exception as e:
         logging.error(f"Server Error: {e}")
-        return jsonify({"error": str(e), "error_type": True}), 500
+        return jsonify({"error": True, "message": str(e)}), 500
 
 
 if __name__ == "__main__":
