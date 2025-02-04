@@ -2,6 +2,7 @@ import os
 import math  # for sqrt
 import requests  # to make http requests to numbers api
 import logging
+import regex as re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -54,6 +55,11 @@ def get_number_properties(num):
     # For 8: ['even']
 
 
+def digit_sum(num):
+    """Get the sum of the digits"""
+    return sum(int(digit) for digit in str(num))
+
+
 def get_fun_fact(num):
     """Fetch a fun fact from Numbers API."""
     try:
@@ -83,12 +89,14 @@ def classify_number():
         # Check if 'number' parameter is missing
         if num_str is None:
             return jsonify({"number": "", "error": True}), 400
+        if not re.match(r"^[-+]?\d+$", num_str): 
+            return jsonify({"number": num_str, "error": True}), 400
 
         # Validate input if its an integer
         try:
             num = int(num_str)
             if num < 0:  # Handle negative numbers
-                return jsonify({"number": num_str, "error": "Number must be non-negative"}), 400
+                return jsonify({"number": num_str, "error": "Number must be positive"}), 400
         except ValueError:
             return jsonify({"number": num_str, "error": True}), 400
 
@@ -101,7 +109,7 @@ def classify_number():
                     "is_prime": is_prime(num),
                     "is_perfect": is_perfect(num),
                     "properties": get_number_properties(num),
-                    "digit_sum": sum(int(digit) for digit in str(num)),
+                    "digit_sum": digit_sum(num),
                     "fun_fact": get_fun_fact(num),
                 }
             ),
