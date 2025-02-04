@@ -1,11 +1,14 @@
 import os
 import math  # for sqrt
 import requests  # to make http requests to numbers api
+import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+logging.basicConfig(level=logging.INFO)
 
 
 def is_armstrong_number(num):
@@ -65,12 +68,18 @@ def get_fun_fact(num):
         return "Unable to fetch fun fact."
 
 
+@app.route('/')
+def home():
+    return jsonify({"message": "Number Properties API is running"})
+
+
 @app.route("/api/classify-number", methods=["GET"])
 def classify_number():
     """Classify a number and return its properties."""
     try:
         # Figure how to get number from query parameter
         num_str = request.args.get("number", "")
+        logging.info(f"Received number: {num_str}")  # Add logging
 
         # Validate input
         try:
@@ -96,11 +105,6 @@ def classify_number():
 
     except Exception as e:
         return jsonify({"error": str(e), "error_type": True}), 500
-
-
-@app.route("/test")
-def test():
-    return "Hello from test!"
 
 
 if __name__ == "__main__":
