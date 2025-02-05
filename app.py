@@ -105,7 +105,7 @@ def classify_number():
             jsonify(
                 {
                     "number": num_str,
-                    "is_prime": is_prime(abs(num)),
+                    "is_prime": is_prime(num),
                     "is_perfect": is_perfect(abs(num)),
                     "properties": get_number_properties(abs(num)),
                     "digit_sum": digit_sum(abs(num)),
