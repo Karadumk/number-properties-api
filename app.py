@@ -42,13 +42,11 @@ def is_perfect(num):
 def get_number_properties(num):
     """Get various properties of a number."""
     properties = []
-
-    # Check if even/odd
-    properties.append("even" if num % 2 == 0 else "odd")
-
     # Check for Armstrong number
     if is_armstrong_number(num):
         properties.append("armstrong")
+    # Check if even/odd
+    properties.append("even" if num % 2 == 0 else "odd")
     return properties
     # Should look like
     # For 371: ['odd', 'armstrong']
@@ -64,11 +62,12 @@ def get_fun_fact(num):
     """Fetch a fun fact from Numbers API."""
     try:
         # Make GET request to Numbers API
-        response = requests.get(f"http://numbersapi.com/{num}/math")
+        response = requests.get(f"http://numbersapi.com/{num}/math?json")
         # Return fact if successful, otherwise return error message
-        return (
-            response.text if response.status_code == 200 else "No fun fact available."
-        )
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("text", "No fun fact found!")
+        return "No fun fact available."
     except Exception:
         return "Unable to fetch fun fact."
 
@@ -89,14 +88,14 @@ def classify_number():
         # Check if 'number' parameter is missing
         if num_str is None:
             return jsonify({"number": "", "error": True}), 400
-        if not re.match(r"^[-+]?\d+$", num_str): 
-            return jsonify({"number": num_str, "error": True}), 400
+        if not re.match(r"^-?\d+$", num_str):
+            return jsonify({"number": num_str, "error": "Invalid input. Please provide a valid number."}), 400
 
         # Validate input if its an integer
         try:
             num = int(num_str)
-            if num < 0:  # Handle negative numbers
-                return jsonify({"number": num_str, "error": "Number must be positive"}), 400
+            # if num < 0:  # Handle negative numbers
+            # return jsonify({"number": num_str, "error": "Number must be positive"}), 400
         except ValueError:
             return jsonify({"number": num_str, "error": True}), 400
 
@@ -105,12 +104,12 @@ def classify_number():
         return (
             jsonify(
                 {
-                    "number": num,
-                    "is_prime": is_prime(num),
-                    "is_perfect": is_perfect(num),
-                    "properties": get_number_properties(num),
-                    "digit_sum": digit_sum(num),
-                    "fun_fact": get_fun_fact(num),
+                    "number": num_str,
+                    "is_prime": is_prime(abs(num)),
+                    "is_perfect": is_perfect(abs(num)),
+                    "properties": get_number_properties(abs(num)),
+                    "digit_sum": digit_sum(abs(num)),
+                    "fun_fact": get_fun_fact(abs(num)),
                 }
             ),
             200,
