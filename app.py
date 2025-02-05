@@ -89,7 +89,7 @@ def classify_number():
         if num_str is None:
             return jsonify({"number": "", "error": True}), 400
         if not re.match(r"^-?\d+$", num_str):
-            return jsonify({"number": num_str, "error": "Invalid input. Please provide a valid number."}), 400
+            return jsonify({"number": num_str, "error": True}), 400
 
         # Validate input if its an integer
         try:
